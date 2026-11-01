@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Carte interactive du campus — démo RDF</title>
+<link rel="stylesheet" href="/frontend/style.css">
+</head>
+<body>
+
+<header>
+  <img src="/assets/header/logo-plurital.jpg" alt="Plurital">
+  <h1>Carte interactive du campus de Paris Nanterre</h1>
+  <a class="header-btn" href="/graphs">Graphes disponibles</a>
+</header>
+
+<main>
+  <div id="map-container">
+    <img class="map" id="map-image" alt="Carte du campus">
+    <div id="markers"></div>
+  </div>
+
+  <div id="sidebar">
+    <h2>Propriétés du ConceptScheme</h2>
+    <div id="scheme-properties">Chargement...</div>
+    <h2>Ressources du graphe RDF</h2>
+    <ul id="resource-list"></ul>
+    <div id="detail">Cliquez sur un marqueur ou une ressource pour voir le détail.</div>
+  </div>
+</main>
+
+<div id="ner-demo">
+  <h2>Démo spaCy : extraction d'entités nommées</h2>
+  <textarea id="ner-text" placeholder="Ex : La conférence a lieu à l'université Paris Nanterre le 12 mars."></textarea><br>
+  <button id="ner-button">Extraire les entités</button>
+  <div id="ner-result"></div>
+</div>
+
+<script>
+const markersDiv = document.getElementById('markers');
+const mapImage = document.getElementById('map-image');
+const listEl = document.getElementById('resource-list');
+const detailEl = document.getElementById('detail');
+
+function showDetail(r) {
+  detailEl.innerHTML = '<strong>' + r.label + '</strong><br>' + (r.definition || '');
+  document.querySelectorAll('.zone, #resource-list li').forEach(el => el.classList.remove('active'));
+  if (r.zoneEl) r.zoneEl.classList.add('active');
+  if (r.listEl) r.listEl.classList.add('active');
+}
+
+// Graphe selectionne via ?graph=... (lien depuis la page /graphs), sinon tous les graphes
+const graphParam = new URLSearchParams(location.search).get('graph');
+const graphQuery = graphParam ? '?graph=' + encodeURIComponent(graphParam) : '';
+
+// Affiche toutes les proprietes de chaque skos:ConceptScheme au-dessus de la liste
+fetch('/api/schemes' + graphQuery).then(r => r.json()).then(schemes => {
+  const container = document.getElementById('scheme-properties');
+  container.innerHTML = '';
+  if (schemes.length === 0) {
+    container.textContent = 'Aucun ConceptScheme dans le graphe.';
+    return;
+  }
+  schemes.forEach(scheme => {
+    // Le titre de la page (h1) vient de la propriete plurital:titlePage du scheme
+    const titleProp = scheme.properties.find(p => p.predicate.split(/[#/]/).pop() === 'titlePage');
+    if (titleProp) document.querySelector('header h1').textContent = titleProp.value;
+    const h = document.createElement('h3');
+    h.textContent = scheme.id;
+    container.appendChild(h);
+    const ul = document.createElement('ul');
+    scheme.properties.forEach(prop => {
+      const li = document.createElement('li');
+      const pred = document.createElement('span');
+      pred.className = 'pred';
+      // Raccourcit l'URI du predicat (partie apres # ou /)
+      pred.textContent = prop.predicate.split(/[#/]/).pop() + ' : ';
+      li.appendChild(pred);
+      li.appendChild(document.createTextNode(prop.value));
+      ul.appendChild(li);
+    });
+    container.appendChild(ul);
+  });
+});
+
+fetch('/api/resources' + graphQuery).then(r => r.json()).then(resources => {
+  const images = [...new Set(resources.map(r => r.image))];
+  if (images.length > 0) mapImage.src = '/ressources/' + images[0];
+
+  resources.forEach(r => {
+    // Rectangle defini par 4 coins "x,y" en % : hl, hr, lf, lr
+    if (r.hl && r.hr && r.lf && r.lr) {
+      const hl = r.hl.split(',').map(Number);
+      const hr = r.hr.split(',').map(Number);
+      const lf = r.lf.split(',').map(Number);
+      const z = document.createElement('div');
+      z.className = 'zone';
+      z.style.left = hl[0] + '%';
+      z.style.top = hl[1] + '%';
+      z.style.width = (hr[0] - hl[0]) + '%';
+      z.style.height = (lf[1] - hl[1]) + '%';
+      z.title = r.label;
+      z.addEventListener('click', () => showDetail(r));
+      markersDiv.appendChild(z);
+      r.zoneEl = z;
+    }
+    const li = document.createElement('li');
+    li.textContent = r.label;
+    li.addEventListener('click', () => showDetail(r));
+    listEl.appendChild(li);
+    r.listEl = li;
+  });
+});
+
+document.getElementById('ner-button').addEventListener('click', () => {
+  const text = document.getElementById('ner-text').value;
+  fetch('/api/ner', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: text })
+  })
+    .then(r => r.json())
+    .then(entities => {
+      const container = document.getElementById('ner-result');
+      container.innerHTML = '';
+      if (!entities.length) {
+        container.textContent = 'Aucune entité trouvée.';
+        return;
+      }
+      // Table des entites : la couleur de la ligne depend du type (classe ent-XXX)
+      const table = document.createElement('table');
+      table.id = 'ner-table';
+      const headRow = document.createElement('tr');
+      ['Texte', 'Type', 'Début', 'Fin', 'URI suggérée'].forEach(h => {
+        const th = document.createElement('th');
+        th.textContent = h;
+        headRow.appendChild(th);
+      });
+      const thead = document.createElement('thead');
+      thead.appendChild(headRow);
+      table.appendChild(thead);
+      const tbody = document.createElement('tbody');
+      entities.forEach(e => {
+        const tr = document.createElement('tr');
+        tr.className = 'ent-' + e.label;
+        [e.text, e.label, e.start, e.end, e.suggested_uri].forEach(v => {
+          const td = document.createElement('td');
+          td.textContent = v;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      container.appendChild(table);
+    });
+});
+</script>
+
+<footer>
+  <img src="/assets/footer/logo-inalco.png" alt="Inalco">
+  <img src="/assets/footer/logo-p10.png" alt="Paris 10">
+  <img src="/assets/footer/logo-p3.png" alt="Paris 3">
+</footer>
+
+</body>
+</html>

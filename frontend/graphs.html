@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Graphes disponibles — démo RDF</title>
+<link rel="stylesheet" href="/frontend/style.css">
+</head>
+<body>
+
+<header>
+  <img src="/assets/header/logo-plurital.jpg" alt="Plurital">
+  <h1>Graphes disponibles dans le dossier graph/</h1>
+  <a class="header-btn" href="/">Retour à la carte</a>
+</header>
+
+<main>
+  <div id="sidebar" style="max-width: 480px;">
+    <h2>Fichiers RDF</h2>
+    <ul id="graph-list"></ul>
+  </div>
+</main>
+
+<footer>
+  <img src="/assets/footer/logo-inalco.png" alt="Inalco">
+  <img src="/assets/footer/logo-p10.png" alt="Paris 10">
+  <img src="/assets/footer/logo-p3.png" alt="Paris 3">
+</footer>
+
+<script>
+fetch('/api/graphs').then(r => r.json()).then(files => {
+  const listEl = document.getElementById('graph-list');
+  if (files.length === 0) {
+    listEl.textContent = 'Aucun fichier .rdf dans le dossier graph/.';
+    return;
+  }
+  files.forEach(f => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = '/?graph=' + encodeURIComponent(f);
+    a.textContent = f;
+    li.appendChild(a);
+    listEl.appendChild(li);
+  });
+});
+</script>
+
+</body>
+</html>

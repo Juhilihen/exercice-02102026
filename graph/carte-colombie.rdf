@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xml:base="http://example.org/ns/"
+    xmlns:plurital="https://plurital.org/ns/model#">
+
+    <skos:Concept rdf:about="bogota">
+        <skos:inScheme rdf:resource="carte-colombie"/>
+        <skos:prefLabel xml:lang="fr">Bogotá</skos:prefLabel>
+        <skos:definition xml:lang="fr">Capitale de la Colombie, située sur l'altiplano central.</skos:definition>
+        <plurital:image>carte-colombie.jpg</plurital:image>
+        <plurital:hl>42.0,46.0</plurital:hl>
+        <plurital:hr>54.0,46.0</plurital:hr>
+        <plurital:lf>42.0,50.0</plurital:lf>
+        <plurital:lr>54.0,50.0</plurital:lr>
+    </skos:Concept>
+
+    <skos:ConceptScheme rdf:about="carte-colombie">
+		<plurital:titlePage>Carte interactive de la Colombie</plurital:titlePage>
+        <skos:prefLabel xml:lang="fr">Schéma de la carte de Colombie</skos:prefLabel>
+        <skos:definition xml:lang="fr">Schéma de concepts regroupant les ressources affichées sur la carte de la Colombie.</skos:definition>
+        <dcterms:title>Carte interactive de la Colombie</dcterms:title>
+        <dcterms:description>Deuxième graphe de la démo : carte-colombie.jpg dans le dossier ressources/.</dcterms:description>
+    </skos:ConceptScheme>
+
+</rdf:RDF>

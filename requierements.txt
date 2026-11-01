@@ -1,0 +1,7 @@
+flask>=3.1
+rdflib>=7.6
+# rdflib 7.6.0 casse avec pyparsing < 3.3 (erreur Param.postParse2) : le pincer
+pyparsing>=3.3,<4
+spacy>=3.8
+# Modèle français de spaCy à télécharger séparément :
+#   python -m spacy download fr_core_news_md

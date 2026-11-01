@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xml:base="http://example.org/ns/"
+    xmlns:plurital="https://plurital.org/ns/model#">
+
+    <!-- Chaque concept SKOS est relie a une image (plurital:image) et a un
+         rectangle sur cette image, defini par 4 coins en pourcentage :
+         plurital:hl (haut gauche), plurital:hr (haut droite),
+         plurital:lf (bas gauche), plurital:lr (bas droite).
+         Chaque coin a pour valeur "x,y". -->
+		 
+    <skos:Concept rdf:about="bibliotheque-universitaire">
+		<skos:inScheme rdf:resource="campus-nanterre"/>
+        <skos:prefLabel xml:lang="fr">Bibliothèque universitaire</skos:prefLabel>
+        <skos:definition xml:lang="fr">La bibliothèque universitaire est composée du Pixel et de 5 salles thématiques où vous pouvez travailler et accéder librement à des ouvrages, des films et aux dernières années des revues auxquelles la BU est abonnée :
+- Salle de Droit et Science politique : administration publique, droit public, droit privé, science politique
+- Salle des Sciences économiques : économie, mathématiques, informatique, généralités (préparation concours, orientation professionnelle) ; et des Arts du spectacle : films et ouvrages de cinéma et de théâtre
+- Sciences humaines : archéologie, arts du spectacle, géographie, histoire, histoire de l'art, philosophie, religion
+- Salle de Lettres, langues et cultures : langues, lettres classiques, littérature française, littérature générale, linguistique
+- Salle des Sciences sociales : sciences de l'éducation, sociologie, anthropologie, ethnologie, psychologie, sciences de l'information et de la communication, sciences et médecine, sociologie, STAPS
+- Certains ouvrages et revues sont conservés dans les magasins situés dans la Tour du bâtiment. Ces documents doivent être demandés via le catalogue en ligne.</skos:definition>
+        <plurital:image>campus-nanterre.png</plurital:image>
+        <plurital:hl>69.0,40.5</plurital:hl>
+        <plurital:hr>79.0,40.5</plurital:hr>
+        <plurital:lf>79.0,52.0</plurital:lf>
+        <plurital:lr>80.0,52.0</plurital:lr>
+    </skos:Concept>
+
+    <skos:Concept rdf:about="restaurant-universitaire">
+		<skos:inScheme rdf:resource="campus-nanterre"/>
+        <skos:prefLabel xml:lang="fr">Restaurant universitaire (CROUS)</skos:prefLabel>
+        <skos:definition xml:lang="fr">Le Crous de Versailles vous propose une offre de restauration variée et située au plus près des lieux d’études de l’université. Les établissements sont ouverts à toutes les étudiantes et à tous les étudiants, avec un tarif social fixé à 1€ le plateau-repas pris au restaurant universitaire. Les étudiantes et étudiants non boursiers en situation de précarité peuvent aussi en faire la demande (voir rubrique aides et accompagnements).</skos:definition>
+        <plurital:image>campus-nanterre.png</plurital:image>
+        <plurital:hl>69.0,56.5</plurital:hl>
+        <plurital:hr>76.0,56.5</plurital:hr>
+        <plurital:lf>69.0,64.5</plurital:lf>
+        <plurital:lr>76.0,64.5</plurital:lr>
+    </skos:Concept>
+
+    <skos:Concept rdf:about="BFC">
+		<skos:inScheme rdf:resource="campus-nanterre"/>
+        <skos:prefLabel xml:lang="fr">Formation Continue</skos:prefLabel>
+        <skos:definition xml:lang="fr">Batiment de la Formation Continue, utilisé pour des cuases administratives comme éducatives avec les cours de M2 TAL par exemple.</skos:definition>
+        <plurital:image>campus-nanterre.png</plurital:image>
+        <plurital:hl>53.2,78.0</plurital:hl>
+        <plurital:hr>60.0,78.0</plurital:hr>
+        <plurital:lf>53.2,84.0</plurital:lf>
+        <plurital:lr>60.0,84.0</plurital:lr>
+    </skos:Concept>
+
+    <skos:Concept rdf:about="gare-rer-nanterre-universite">
+		<skos:inScheme rdf:resource="campus-nanterre"/>
+        <skos:prefLabel xml:lang="fr">Gare RER Nanterre Université</skos:prefLabel>
+        <skos:definition xml:lang="fr">La gare de Nanterre-Université est une gare ferroviaire française de la ligne de Paris-Saint-Lazare à Saint-Germain-en-Laye, située dans la commune de Nanterre (département des Hauts-de-Seine). Elle tient son nom du fait qu'elle est située à côté du campus de l'université Paris-Nanterre. La gare est desservie par les trains de la ligne A du RER parcourant la branche de Saint-Germain-en-Laye, ainsi que par les trains de la ligne L du réseau Transilien Paris Saint-Lazare sur la branche de Cergy-le-Haut.</skos:definition>
+        <plurital:image>campus-nanterre.png</plurital:image>
+        <plurital:hl>25.0,80.0</plurital:hl>
+        <plurital:hr>35.0,80.0</plurital:hr>
+        <plurital:lf>25.0,92.0</plurital:lf>
+        <plurital:lr>35.0,92.0</plurital:lr>
+    </skos:Concept>
+
+    <!-- Le ConceptScheme regroupe les concepts ci-dessus (skos:inScheme).
+         Toutes ses proprietes sont affichees sur la carte interactive. -->
+    <skos:ConceptScheme rdf:about="campus-nanterre">
+		<plurital:titlePage>Plan du campus - Université Paris Nanterre</plurital:titlePage>
+        <skos:prefLabel xml:lang="fr">Schéma du campus de Paris Nanterre</skos:prefLabel>
+        <skos:definition xml:lang="fr">Schéma de concepts regroupant les ressources affichées sur la carte interactive.</skos:definition>
+        <dcterms:title>Carte interactive du campus</dcterms:title>
+        <dcterms:description >L’Université Paris Nanterre, avec près de 35 000 étudiantes et étudiants et 41 unités de recherche, est une institution de recherche et de formation majeure en Ile-de-France. Elle est l’université des Hauts-de-Seine, riche de son histoire, de ses valeurs et de son rayonnement national et international. Université pluridisciplinaire, son offre de formation et ses activités de recherche couvrent le large éventail des sciences humaines et sociales, des lettres et des langues, des sciences juridiques, économiques et de gestion, de la technologie, de la culture et des arts, des sciences de l’information et de la communication, des sciences pour l’ingénieur et des sciences et techniques des activités physiques et sportives. Dans tous ces domaines, depuis sa création, l’Université Paris Nanterre a défendu l’innovation, en recherche et en pédagogie, et a tenu à jouer un rôle social : de promotion sociale de ses étudiantes et étudiants et de regard critique, au sens noble du terme, sur la société et ses évolutions. L’établissement est implanté sur trois sites : Nanterre, Ville-d’Avray, Saint-Cloud. Le site de Nanterre est unique en région parisienne : un campus « vert » de 32 hectares qui offre des infrastructures exceptionnelles pour les activités sportives, culturelles et de documentation scientifique. S’y trouvent également La Contemporaine, bibliothèque, archives, musée des mondes contemporains, la Maison des Sciences de l’Homme-Mondes et le théâtre Bernard-Marie Koltès. Ancrée dans un territoire au potentiel unique, l’Université Paris Nanterre s’inscrit aussi dans des réseaux à toutes les échelles, elle est notamment membre du Campus Condorcet, de l’Alliance Paris Lumières et de l’université européenne EDUC.</dcterms:description>
+    </skos:ConceptScheme>
+
+</rdf:RDF>

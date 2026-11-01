@@ -1,0 +1,74 @@
+* { box-sizing: border-box; }
+body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; color: #222; }
+header { display: flex; align-items: center; gap: 12px; background: #1f3a5f; color: #fff; padding: 10px 20px; }
+header img { height: 40px; }
+header h1 { flex: 1; margin: 0; font-size: 1.3em; }
+.header-btn {
+  background: #fff; color: #1f3a5f; text-decoration: none;
+  padding: 8px 14px; border-radius: 6px; font-weight: bold;
+}
+.header-btn:hover { background: #d4edda; }
+#graph-list { list-style: none; padding: 0; margin: 0; }
+#graph-list li { padding: 8px; border-bottom: 1px solid #eee; }
+#graph-list li:hover { background: #e8f0fe; }
+#graph-list a { color: #1f3a5f; text-decoration: none; font-family: monospace; }
+#graph-list a:hover { text-decoration: underline; }
+main { display: flex; gap: 16px; padding: 16px; align-items: flex-start; }
+#map-container { position: relative; flex: 2; max-width: 70%; }
+#map-container img.map { width: 100%; display: block; border: 2px solid #1f3a5f; border-radius: 6px; }
+/* Rectangle autour d'une ressource : seule la bordure est coloree,
+   l'interieur reste transparent pour voir la carte. */
+.zone {
+  position: absolute; border: 3px solid #e63946; background: transparent;
+  cursor: pointer;
+}
+.zone:hover, .zone.active { border-color: #51C951; }
+#sidebar { flex: 1; background: #fff; border-radius: 6px; padding: 12px; min-width: 260px; }
+#sidebar h2 { margin-top: 0; font-size: 1.1em; }
+#scheme-properties { background: #eef4fb; border-radius: 6px; padding: 10px; margin-bottom: 14px; font-size: .9em; }
+#scheme-properties h3 { margin: 0 0 6px; font-size: 1em; }
+#scheme-properties ul { list-style: none; padding: 0; margin: 0; }
+#scheme-properties li { padding: 3px 0; border-bottom: 1px solid #dde6f0; word-break: break-word; }
+#scheme-properties .pred { color: #1f3a5f; font-weight: bold; }
+#resource-list { list-style: none; padding: 0; margin: 0 0 12px; }
+#resource-list li { padding: 8px; border-bottom: 1px solid #eee; cursor: pointer; }
+#resource-list li:hover, #resource-list li.active { background: #e8f0fe; }
+#detail { background: #f8f9fa; border-radius: 6px; padding: 10px; font-size: .95em; }
+#ner-demo {
+  margin: 0 16px 24px; background: #fff; border-radius: 10px; padding: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+#ner-demo h2 { margin-top: 0; }
+#ner-demo textarea {
+  width: 100%; height: 70px; padding: 10px; resize: vertical;
+  border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: .95em;
+}
+#ner-demo textarea:focus { outline: 2px solid #1f3a5f; outline-offset: -1px; border-color: #1f3a5f; }
+#ner-demo button {
+  margin-top: 10px; padding: 9px 20px; border: none; border-radius: 8px;
+  background: #1f3a5f; color: #fff; font-size: .95em; font-weight: bold;
+  cursor: pointer; transition: background .15s ease, transform .1s ease;
+}
+#ner-demo button:hover { background: #2c5282; }
+#ner-demo button:active { transform: scale(.97); }
+#ner-result { margin-top: 12px; font-size: .9em; }
+#ner-table {
+  border-collapse: separate; border-spacing: 0; margin-top: 8px; min-width: 420px;
+  border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.12);
+}
+#ner-table th, #ner-table td { border: none; border-bottom: 1px solid #eee; padding: 8px 14px; text-align: left; }
+#ner-table thead th { background: #1f3a5f; color: #fff; font-size: .85em; text-transform: uppercase; letter-spacing: .04em; }
+#ner-table tbody tr:last-child td { border-bottom: none; }
+#ner-table tbody tr:hover td { filter: brightness(.96); }
+#ner-table td:last-child { font-family: monospace; }
+/* Pastille coloree pour le type d'entite + fond de ligne selon le type spaCy */
+#ner-table td:nth-child(2) { font-weight: bold; }
+#ner-table tr.ent-LOC { background: #cce5ff; }
+#ner-table tr.ent-ORG { background: #d4edda; }
+#ner-table tr.ent-PER { background: #f8d7da; }
+#ner-table tr.ent-MISC { background: #fff3cd; }
+footer {
+  display: flex; justify-content: center; align-items: center; gap: 24px;
+  background: #1f3a5f; color: #fff; border-top: 1px solid #ddd; padding: 12px 20px; margin-top: 16px;
+}
+footer img { height: 50px; }

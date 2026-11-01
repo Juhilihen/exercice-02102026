@@ -1,0 +1,7 @@
+Etapes:
+- Installer Python
+- Créer un envrionnement virtuel si souhaité 
+- Installer les bibliothèques suivantes:
+pip install rdflib
+pip install -U spacy
+python -m spacy download fr_core_news_md / fr_core_news_sm / fr_core_news_lg

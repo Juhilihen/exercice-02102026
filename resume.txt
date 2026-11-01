@@ -1,0 +1,86 @@
+====================================================================
+RESUME DU PROJET — Exercice-conférence
+Carte interactive du campus de Paris Nanterre (Flask + rdflib + spaCy)
+Document vivant : le mettre a jour a chaque changement du projet.
+====================================================================
+
+OBJECTIF
+--------
+Montrer a des etudiants comment utiliser un environnement virtuel
+Python avec Flask, rdflib et spaCy. Le projet relie des images a des
+fichiers RDF : chaque concept du graphe RDF est associe a une image et
+a une position sur cette image, ce qui permet de construire une carte
+interactive listant toutes les ressources disponibles dans le graphe.
+
+STRUCTURE DU PROJET
+-------------------
+Exercice-conférence/
+├── .venv/                  Environnement virtuel Python (ne pas modifier)
+├── assets/                 Logos utilises dans l'interface web
+│   ├── header/             logo-plurital.jpg (en-tete de la page)
+│   └── footer/             logos partenaires (inalco, p10, p3)
+├── frontend/               Pages HTML servies par Flask
+│   ├── map.html            Carte interactive + liste des ressources + demo NER + pied de page (logos)
+│   ├── graphs.html         Liste des graphes .rdf disponibles (bouton dans l'en-tete)
+│   ├── style.css           Feuille de style commune (lien dans le <head>)
+│   └── hello.html          Page d'exemple minimale
+├── graph/                  Fichiers RDF (les graphes de connaissances)
+│   ├── campus-nanterre.rdf Concepts SKOS + ConceptScheme (image campus-nanterre.png)
+│   └── carte-colombie.rdf  Concepts SKOS + ConceptScheme (image carte-colombie.jpg)
+├── ressources/             Images associees aux concepts des graphes
+│   ├── campus-nanterre.png Carte du campus (3025 x 2271 px)
+│   └── carte-colombie.jpg  Carte de Colombie (1200 x 1596 px)
+├── serveWebService.py      Application Flask (point d'entree)
+├── utilsFront.py           Helpers pour servir les fichiers HTML
+├── utilsGraph.py           Helpers rdflib (lecture du graphe) et spaCy (NER)
+├── requierements.txt       Liste des dependances pip (voir note ci-dessous)
+├── steps.txt               Etapes d'installation pour les etudiants
+└── resume.txt              Ce fichier (resume du projet)
+
+COMMENT CA MARCHE
+-----------------
+1. utilsGraph.loadGraphs() charge tous les .rdf de graph/ dans un graphe
+   rdflib.
+2. Une requete SPARQL extrait chaque concept : label, definition, image et
+   les 4 coins du rectangle (hl, hr, lf, lr en pourcentage de l'image).
+3. L'API Flask /api/resources renvoie ces ressources en JSON.
+4. frontend/map.html affiche l'image avec un marqueur par ressource ;
+   cliquer sur un marqueur ou sur la liste affiche le detail. Au-dessus de
+   la liste, toutes les proprietes du skos:ConceptScheme sont affichees ; le
+   titre h1 de la page est pris dans sa propriete plurital:titlePage.
+5. L'endpoint /api/ner (POST) montre l'extraction d'entites nominees
+   avec spaCy (modele fr_core_news_md) ; le resultat s'affiche en tableau
+   avec une couleur par type (LOC, ORG, PER, MISC) et une colonne
+   "URI suggérée" (texte encode en pourcentage, ex: "Paris Nanterre"
+   -> "Paris%20Nanterre").
+
+Lancer le projet :  .venv\Scripts\python.exe serveWebService.py
+Puis ouvrir :       http://127.0.0.1:5000/
+
+ROUTES DISPONIBLES
+------------------
+/                     Page de la carte interactive
+/graphs               Page listant tous les graphes .rdf du dossier graph/
+/hello                Page d'exemple
+/api/resources        JSON : toutes les ressources du graphe RDF
+                         (ou d'un seul fichier avec ?graph=campus-nanterre.rdf)
+/api/schemes          JSON : chaque ConceptScheme avec toutes ses proprietes
+/api/graphs           JSON : liste des fichiers .rdf du dossier graph/
+/graph/<fichier>      Fichier RDF brut (ex: /graph/campus-nanterre.rdf)
+/api/ner              POST {"text": "..."} -> entites spaCy
+/ressources/<fichier> Images (ex: /ressources/campus-nanterre.png)
+/assets/<fichier>     Logos
+/frontend/<fichier>   Fichiers statiques du frontend (ex: /frontend/style.css)
+
+NOTES / A FAIRE
+---------------
+- Les coordonnees des 4 coins (hl, hr, lf, lr) sont en pourcentage et doivent
+  etre ajustees a l'oeil par rapport a la vraie photo du campus.
+- "requierements.txt" devrait etre renomme "requirements.txt".
+- Le modele spaCy se telecharge avec : python -m spacy download fr_core_news_md
+- Apres chaque arret du serveur, verifier qu'aucun processus serveWebService
+  ne tourne encore (sinon le port 5000 est bloque par une vieille instance) :
+  wmic process where "CommandLine like '%serveWebService%'" get ProcessId
+- rdflib 7.6.0 exige pyparsing >= 3.3 (sinon erreur Param.postParse2 dans
+  les requetes SPARQL) : ne pas downgrader pyparsing.
+====================================================================
