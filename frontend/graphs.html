@@ -10,7 +10,7 @@
 <header>
   <img src="/assets/header/logo-plurital.jpg" alt="Plurital">
   <h1>Graphes disponibles dans le dossier graph/</h1>
-  <a class="header-btn" href="/">Retour à la carte</a>
+  <a class="header-btn" href="/visualization">Retour à la carte</a>
 </header>
 
 <main>
@@ -36,7 +36,7 @@ fetch('/api/graphs').then(r => r.json()).then(files => {
   files.forEach(f => {
     const li = document.createElement('li');
     const a = document.createElement('a');
-    a.href = '/?graph=' + encodeURIComponent(f);
+    a.href = '/visualization?graph=' + encodeURIComponent(f);
     a.textContent = f;
     li.appendChild(a);
     listEl.appendChild(li);

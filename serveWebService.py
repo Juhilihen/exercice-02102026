@@ -7,6 +7,11 @@ app = Flask(__name__)
 
 
 @app.route("/")
+def graphs():
+    return serveHtml("frontend", "graphs.html")
+
+
+@app.route("/visualization")
 def map():
     return serveHtml("frontend", "map.html")
 
@@ -14,11 +19,6 @@ def map():
 @app.route("/hello")
 def hello():
     return serveHtml("frontend", "hello.html")
-
-
-@app.route("/graphs")
-def graphs():
-    return serveHtml("frontend", "graphs.html")
 
 
 @app.route("/api/graphs")
